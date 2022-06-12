@@ -1,12 +1,17 @@
 from datetime import datetime
+from pandas import date_range
 
-def listDates(sdate: str, edate: str) -> list:
-    start_date = datetime.strptime(sdate.strip(), '%Y-%m-%d')
-    end_date = datetime.strptime(edate.strip(), '%Y-%m-%d')
-    outlist = [datetime.strptime('%2.2d-%2.2d' % (y, m), '%Y-%m').strftime('%Y-%m-01')
-        for y in range(start_date.year, end_date.year + 1)
-        for m in range(start_date.month if y == start_date.year else 1, end_date.month + 1 if y == end_date.year else 13)]
-    return outlist
+def listDates(sdate: str, edate: str, duration:str) -> list:
+    # do the day thing
+    if duration.lower()=='d':
+        outlistr = date_range(start=sdate, end=edate)
+        outlist = [str(x)[:10] for x in outlistr]
+        return outlist
+    # do the month thing
+    elif duration.lower()=='m':
+        outlistr = date_range(sdate[:7], edate, freq='MS')
+        outlist = [str(x)[:10] for x in outlistr]
+        return outlist
 
 
 def countValues(rawlist: list) -> list:
